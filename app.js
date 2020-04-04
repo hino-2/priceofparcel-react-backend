@@ -4,13 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var companiesRouter = require('./routes/companies');
-var servicesRouter = require('./routes/services');
-var getOPSByCoordsRouter = require('./routes/getOPSByCoords');
-var getOPSByAddressRouter = require('./routes/getOPSByAddress');
-var getOPSInfoRouter = require('./routes/getOPSInfo');
+var indexRouter            = require('./routes/index');
+var servicesRouter         = require('./routes/services');
+var getOPSByCoordsRouter   = require('./routes/getOPSByCoords');
+var getOPSByAddressRouter  = require('./routes/getOPSByAddress');
+var getOPSInfoRouter       = require('./routes/getOPSInfo');
+var getCountriesListRouter = require('./routes/getCountriesList');
 
 var app = express();
 
@@ -39,12 +38,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/companies', companiesRouter);
 app.use('/services', servicesRouter);
 app.use('/getOPSByCoords', getOPSByCoordsRouter);
 app.use('/getOPSByAddress', getOPSByAddressRouter);
 app.use('/getOPSInfo', getOPSInfoRouter);
+app.use('/getCountriesList', getCountriesListRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
