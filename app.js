@@ -1,8 +1,8 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+'use strict';
+
+// [START gae_node_request_example]
+const express = require('express');
+const path = require('path');
 
 var indexRouter            = require('./routes/index');
 var servicesRouter         = require('./routes/services');
@@ -11,56 +11,32 @@ var getOPSByAddressRouter  = require('./routes/getOPSByAddress');
 var getOPSInfoRouter       = require('./routes/getOPSInfo');
 var getCountriesListRouter = require('./routes/getCountriesList');
 
-var app = express();
+const app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-// var mysql = require("mysql");
-// //Database connection
-// app.use(function(req, res, next){
-// 	res.locals.connection = mysql.createConnection({
-//     host     : 'localhost',
-//     port     : '3306',
-// 		user     : 'root',
-// 		password : 'Gbhfvblf0@',
-// 		database : 'priceparcel'
-// 	});
-// 	res.locals.connection.connect();
-// 	next();
-// });
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
+// app.use('/', indexRouter);
 app.use('/services', servicesRouter);
 app.use('/getOPSByCoords', getOPSByCoordsRouter);
 app.use('/getOPSByAddress', getOPSByAddressRouter);
 app.use('/getOPSInfo', getOPSInfoRouter);
 app.use('/getCountriesList', getCountriesListRouter);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.use("/", express.static(__dirname + '/'));
+app.use("/static", express.static(__dirname + '/static'));
+app.use("/img", express.static(__dirname + '/img'));
+app.use("/db", express.static(__dirname + '/db'));
+app.use("/ecom", express.static(__dirname + '/ecom'));
+
+app.get('/', (req, res) => {
+  // res.status(200).send('Hello, world!').end();
+  res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+// Start the server
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}`);
+  console.log('Press Ctrl+C to quit.');
 });
+// [END gae_node_request_example]
 
-var http = require('http');
 module.exports = app;
-var server = http.createServer(app);
-server.listen(4000);
